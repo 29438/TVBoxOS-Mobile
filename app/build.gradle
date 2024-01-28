@@ -1,15 +1,19 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.jetbrains.kotlin.android'
 
+def static buildTime() {
+    return new Date().format("yyyyMMdd_HHmm", TimeZone.getTimeZone("GMT+08:00"))
+}
+
 android {
     compileSdkVersion 33
 
     defaultConfig {
-        applicationId 'com.github.tvbox.osc'
+        applicationId 'com.github.tvbox.osc.vip'
         minSdkVersion 24
         targetSdkVersion 30
         versionCode 29
-        versionName '1.0.9'
+        versionName '1.0.9.'.concat(buildTime())
         multiDexEnabled true
         //设置room的Schema的位置
         javaCompileOptions {
