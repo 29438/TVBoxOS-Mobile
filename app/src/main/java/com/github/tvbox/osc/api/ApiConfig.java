@@ -128,7 +128,7 @@ public class ApiConfig {
     }
 
     public void loadConfig(boolean useCache, LoadConfigCallback callback, Activity activity) {
-        String apiUrl = Hawk.get(HawkConfig.API_URL, "https://framagit.org/Asta/tv/-/raw/main/api.json");
+        String apiUrl = Hawk.get(HawkConfig.API_URL, "https://framagit.org/Asta/tv/-/raw/main/vip.json");
         if (apiUrl.isEmpty()) {
             callback.error("-1");
             return;
