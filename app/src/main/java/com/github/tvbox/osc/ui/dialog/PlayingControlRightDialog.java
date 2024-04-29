@@ -72,6 +72,16 @@ public class PlayingControlRightDialog extends DrawerPopupView {
         mBinding.scale.setOnClickListener(view -> changeAndUpdateText(mBinding.scale,mController.mPlayerScaleBtn));
         mBinding.playTimeStart.setOnClickListener(view -> changeAndUpdateText(mBinding.playTimeStart,mController.mPlayerTimeStartBtn));
         mBinding.playTimeEnd.setOnClickListener(view -> changeAndUpdateText(mBinding.playTimeEnd,mController.mPlayerTimeSkipBtn));
+        mBinding.playTimeStart.setOnLongClickListener(view -> {
+            mController.mPlayerTimeStartBtn.performLongClick();
+            mBinding.playTimeStart.setText(mController.mPlayerTimeStartBtn.getText());
+            return true;
+        });
+        mBinding.playTimeEnd.setOnLongClickListener(view -> {
+            mController.mPlayerTimeSkipBtn.performLongClick();
+            mBinding.playTimeEnd.setText(mController.mPlayerTimeSkipBtn.getText());
+            return true;
+        });
         mBinding.increaseStart.setOnClickListener(view -> {
             mController.increaseTime("st");
             updateSkipText(true);

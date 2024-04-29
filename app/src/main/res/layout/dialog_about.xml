@@ -58,6 +58,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="官网：https://cpddd.tk"
+<<<<<<< HEAD
+=======
+        android:textIsSelectable="true"
+        android:layout_marginTop="4dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="微信公众号：幼稚园大班bb"
+>>>>>>> 0437a3b525c1c8a8793c759409504ef70243e6a2
         android:textIsSelectable="true"
         android:layout_marginTop="4dp"/>
     <TextView
@@ -73,17 +82,26 @@
         android:text="GitHub"
         android:textColor="@color/text_gray"
         />
+<<<<<<< HEAD
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="https://github.com/XiaoRanLiu3119/TVBoxOS-Mobile"
         android:textIsSelectable="true"
         android:layout_marginTop="4dp"/>
+=======
+    
+>>>>>>> 0437a3b525c1c8a8793c759409504ef70243e6a2
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:lineSpacingExtra="4dp"
         android:layout_marginVertical="4dp"
+        android:textIsSelectable="true"
+        android:text="https://github.com/XiaoRanLiu3119/TVBoxOS-Mobile"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textIsSelectable="true"
         android:text="https://github.com/q215613905/TVBoxOS"/>
     <TextView

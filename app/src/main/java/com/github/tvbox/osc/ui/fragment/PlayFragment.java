@@ -948,6 +948,8 @@ public class PlayFragment extends BaseLazyFragment {
                             subtitle.content = ss.toString();
                             mController.mSubtitleView.onSubtitleChanged(subtitle);
                         }
+                    } else{
+                        mController.mSubtitleView.onSubtitleChanged(null);
                     }
                 }
             });

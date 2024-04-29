@@ -1,6 +1,7 @@
 package com.github.tvbox.osc.ui.fragment;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 
 import com.angcyo.tablayout.delegate.ViewPager1Delegate;
 import com.blankj.utilcode.util.ConvertUtils;
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.api.ApiConfig;
@@ -24,6 +27,8 @@ import com.github.tvbox.osc.base.BaseVbFragment;
 import com.github.tvbox.osc.bean.AbsSortXml;
 import com.github.tvbox.osc.bean.MovieSort;
 import com.github.tvbox.osc.bean.SourceBean;
+import com.github.tvbox.osc.bean.VodInfo;
+import com.github.tvbox.osc.cache.RoomDataManger;
 import com.github.tvbox.osc.databinding.FragmentHomeBinding;
 import com.github.tvbox.osc.server.ControlManager;
 
@@ -34,11 +39,15 @@ import com.github.tvbox.osc.ui.activity.MainActivity;
 import com.github.tvbox.osc.ui.activity.SettingActivity;
 import com.github.tvbox.osc.ui.activity.SubscriptionActivity;
 import com.github.tvbox.osc.ui.adapter.SelectDialogAdapter;
+import com.github.tvbox.osc.ui.dialog.LastViewedDialog;
 import com.github.tvbox.osc.ui.dialog.SelectDialog;
 import com.github.tvbox.osc.ui.dialog.TipDialog;
 import com.github.tvbox.osc.util.DefaultConfig;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.enums.PopupAnimation;
+import com.lxj.xpopup.enums.PopupPosition;
 import com.orhanobut.hawk.Hawk;
 import com.owen.tvrecyclerview.widget.TvRecyclerView;
 import com.owen.tvrecyclerview.widget.V7GridLayoutManager;
@@ -126,8 +135,9 @@ public class HomeFragment extends BaseVbFragment<FragmentHomeBinding> {
                         mHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                if (!mainActivity.useCacheConfig)
-                                    ToastUtils.showShort("更新订阅成功");
+                                if (!mainActivity.useCacheConfig){
+                                    new QueryHistoryTask().execute();
+                                }
                                 initData();
                             }
                         }, 50);
@@ -381,5 +391,37 @@ public class HomeFragment extends BaseVbFragment<FragmentHomeBinding> {
     public void onDestroy() {
         super.onDestroy();
         ControlManager.get().stopServer();
+    }
+
+
+    class QueryHistoryTask extends AsyncTask<Void, Void, List<VodInfo>> {
+        // 后台执行查询操作
+        @Override
+        protected List<VodInfo> doInBackground(Void... voids) {
+            List<VodInfo> allVodRecord = RoomDataManger.getAllVodRecord(100);
+            List<VodInfo> vodInfoList = new ArrayList<>();
+            for (VodInfo vodInfo : allVodRecord) {
+                if (vodInfo.playNote != null && !vodInfo.playNote.isEmpty())
+                    vodInfo.note = vodInfo.playNote;
+                vodInfoList.add(vodInfo);
+            }
+            return vodInfoList;
+        }
+
+        // 查询完成后更新UI
+        @Override
+        protected void onPostExecute(List<VodInfo> vodInfoList) {
+            if (vodInfoList!=null && !vodInfoList.isEmpty() && vodInfoList.get(0)!=null){
+                new XPopup.Builder(getContext())
+                        .hasShadowBg(false)
+                        .isDestroyOnDismiss(true)
+                        .isCenterHorizontal(true)
+                        .isTouchThrough(true)
+                        .offsetY(ScreenUtils.getAppScreenHeight()-360)
+                        .asCustom(new LastViewedDialog(getContext(),vodInfoList.get(0)))
+                        .show()
+                        .delayDismiss(4000);
+            }
+        }
     }
 }

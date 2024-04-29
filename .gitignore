@@ -96,3 +96,5 @@ lint/tmp/
 
 .idea/
 /app/release/
+/.idea/
+*.jks
