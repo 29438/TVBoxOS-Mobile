@@ -1592,8 +1592,6 @@ public class PlayFragment extends BaseLazyFragment {
         }
     }
 
-    // webview
-    private XWalkView mXwalkWebView;
     private WebView mSysWebView;
     private final Map<String, Boolean> loadedUrls = new HashMap<>();
     private LinkedList<String> loadFoundVideoUrls = new LinkedList<>();
@@ -1601,77 +1599,28 @@ public class PlayFragment extends BaseLazyFragment {
     private final AtomicInteger loadFoundCount = new AtomicInteger(0);
 
     void loadWebView(String url) {
-        if (mSysWebView == null && mXwalkWebView == null) {
-            boolean useSystemWebView = Hawk.get(HawkConfig.PARSE_WEBVIEW, true);
-            if (!useSystemWebView) {
-                XWalkUtils.tryUseXWalk(mContext, new XWalkUtils.XWalkState() {
-                    @Override
-                    public void success() {
-                        initWebView(!sourceBean.getClickSelector().isEmpty());
-                        loadUrl(url);
-                    }
-
-                    @Override
-                    public void fail() {
-                        Toast.makeText(mContext, "XWalkView不兼容，已替换为系统自带WebView", Toast.LENGTH_SHORT).show();
-                        initWebView(true);
-                        loadUrl(url);
-                    }
-
-                    @Override
-                    public void ignore() {
-                        Toast.makeText(mContext, "XWalkView运行组件未下载，已替换为系统自带WebView", Toast.LENGTH_SHORT).show();
-                        initWebView(true);
-                        loadUrl(url);
-                    }
-                });
-            } else {
-                initWebView(true);
-                loadUrl(url);
-            }
+        if (mSysWebView == null) {
+            mSysWebView = new MyWebView(mContext);
+            configWebViewSys(mSysWebView);
+            loadUrl(url);
         } else {
             loadUrl(url);
         }
     }
 
-    void initWebView(boolean useSystemWebView) {
-        if (useSystemWebView) {
-            mSysWebView = new MyWebView(mContext);
-            configWebViewSys(mSysWebView);
-        } else {
-            mXwalkWebView = new MyXWalkView(mContext);
-            configWebViewX5(mXwalkWebView);
-        }
-    }
-
     void loadUrl(String url) {
         if (!isAdded()) return;
-        requireActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mXwalkWebView != null) {
-                    mXwalkWebView.stopLoading();
-                    if (webUserAgent != null) {
-                        mXwalkWebView.getSettings().setUserAgentString(webUserAgent);
-                    }
-                    //mXwalkWebView.clearCache(true);
-                    if (webHeaderMap != null) {
-                        mXwalkWebView.loadUrl(url, webHeaderMap);
-                    } else {
-                        mXwalkWebView.loadUrl(url);
-                    }
+        requireActivity().runOnUiThread(() -> {
+            if (mSysWebView != null) {
+                mSysWebView.stopLoading();
+                if (webUserAgent != null) {
+                    mSysWebView.getSettings().setUserAgentString(webUserAgent);
                 }
-                if (mSysWebView != null) {
-                    mSysWebView.stopLoading();
-                    if (webUserAgent != null) {
-                        mSysWebView.getSettings().setUserAgentString(webUserAgent);
-                    }
-                    //mSysWebView.clearCache(true);
-                    if (webHeaderMap != null) {
-                        mSysWebView.loadUrl(url, webHeaderMap);
-                    } else {
-                        mSysWebView.loadUrl(url);
-                    }
+                //mSysWebView.clearCache(true);
+                if (webHeaderMap != null) {
+                    mSysWebView.loadUrl(url, webHeaderMap);
+                } else {
+                    mSysWebView.loadUrl(url);
                 }
             }
         });
@@ -1679,29 +1628,16 @@ public class PlayFragment extends BaseLazyFragment {
 
     void stopLoadWebView(boolean destroy) {
         if (mActivity == null || !isAdded()) return;
-        requireActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+        requireActivity().runOnUiThread(() -> {
 
-                if (mXwalkWebView != null) {
-                    mXwalkWebView.stopLoading();
-                    mXwalkWebView.loadUrl("about:blank");
-                    if (destroy) {
-//                        mXwalkWebView.clearCache(true);
-                        mXwalkWebView.removeAllViews();
-                        mXwalkWebView.onDestroy();
-                        mXwalkWebView = null;
-                    }
-                }
-                if (mSysWebView != null) {
-                    mSysWebView.stopLoading();
-                    mSysWebView.loadUrl("about:blank");
-                    if (destroy) {
+            if (mSysWebView != null) {
+                mSysWebView.stopLoading();
+                mSysWebView.loadUrl("about:blank");
+                if (destroy) {
 //                        mSysWebView.clearCache(true);
-                        mSysWebView.removeAllViews();
-                        mSysWebView.destroy();
-                        mSysWebView = null;
-                    }
+                    mSysWebView.removeAllViews();
+                    mSysWebView.destroy();
+                    mSysWebView = null;
                 }
             }
         });

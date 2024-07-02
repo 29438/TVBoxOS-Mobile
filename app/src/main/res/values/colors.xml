@@ -3,9 +3,9 @@
 
 
     <!--应用的主要色调,actionBar默认使用该颜色,Toolbar导航栏的底色-->
-    <color name="colorPrimary">#2e405c</color>
+    <color name="colorPrimary">#567df4</color>
     <!--CheckBox,RadioButton,SwitchCompat等一般控件的选中效果默认采用该颜色-->
-    <color name="colorAccent">#2e405c</color>
+    <color name="colorAccent">#3e4fb1</color>
     <!--    默认window窗口(activity)背景颜色-->
     <color name="windowBackground">#fff</color>
 

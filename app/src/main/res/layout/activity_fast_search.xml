@@ -134,16 +134,6 @@
         android:visibility="gone"
         tools:visibility="visible">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_fenci"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:listitem="@layout/item_search_word_hot"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp"
-            />
-
         <LinearLayout
             android:id="@+id/llWord"
             android:layout_width="120dp"

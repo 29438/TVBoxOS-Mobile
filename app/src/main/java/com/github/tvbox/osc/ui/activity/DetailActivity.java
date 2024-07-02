@@ -46,7 +46,7 @@ import com.github.tvbox.osc.bean.ParseBean;
 import com.github.tvbox.osc.bean.SourceBean;
 import com.github.tvbox.osc.bean.VodInfo;
 import com.github.tvbox.osc.cache.RoomDataManger;
-import com.github.tvbox.osc.constant.Constants;
+import com.github.tvbox.osc.constant.IntentKey;
 import com.github.tvbox.osc.databinding.ActivityDetailBinding;
 import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.receiver.BatteryReceiver;
@@ -165,7 +165,6 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
         seriesAdapter = new SeriesAdapter(false);
         mBinding.mGridView.setAdapter(seriesAdapter);
         mBinding.mGridViewFlag.setHasFixedSize(true);
-        mBinding.mGridViewFlag.setLayoutManager(new V7LinearLayoutManager(this.mContext, 0, false));
         seriesFlagAdapter = new SeriesFlagAdapter();
         mBinding.mGridViewFlag.setAdapter(seriesFlagAdapter);
         isReverse = false;
@@ -883,9 +882,9 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
                 ratio = new Rational(16, 9);
             }
             List<RemoteAction> actions = new ArrayList<>();
-            actions.add(generateRemoteAction(android.R.drawable.ic_media_previous, Constants.BROADCAST_ACTION_PREV, "Prev", "Play Previous"));
-            actions.add(generateRemoteAction(android.R.drawable.ic_media_play, Constants.BROADCAST_ACTION_PLAYPAUSE, "Play", "Play/Pause"));
-            actions.add(generateRemoteAction(android.R.drawable.ic_media_next, Constants.BROADCAST_ACTION_NEXT, "Next", "Play Next"));
+            actions.add(generateRemoteAction(android.R.drawable.ic_media_previous, IntentKey.BROADCAST_ACTION_PREV, "Prev", "Play Previous"));
+            actions.add(generateRemoteAction(android.R.drawable.ic_media_play, IntentKey.BROADCAST_ACTION_PLAYPAUSE, "Play", "Play/Pause"));
+            actions.add(generateRemoteAction(android.R.drawable.ic_media_next, IntentKey.BROADCAST_ACTION_NEXT, "Next", "Play Next"));
             PictureInPictureParams params = new PictureInPictureParams.Builder()
                     .setAspectRatio(ratio)
                     .setActions(actions).build();
@@ -911,7 +910,7 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
                 PendingIntent.getBroadcast(
                         DetailActivity.this,
                         actionCode,
-                        new Intent(Constants.BROADCAST_ACTION).putExtra("action", actionCode),
+                        new Intent(IntentKey.BROADCAST_ACTION).putExtra("action", actionCode),
                         0);
         final Icon icon = Icon.createWithResource(DetailActivity.this, iconResId);
         return (new RemoteAction(icon, title, desc, intent));
@@ -927,25 +926,25 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
 
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    if (intent == null || !intent.getAction().equals(Constants.BROADCAST_ACTION) || playFragment.getController() == null) {
+                    if (intent == null || !intent.getAction().equals(IntentKey.BROADCAST_ACTION) || playFragment.getController() == null) {
                         return;
                     }
 
                     int currentStatus = intent.getIntExtra("action", 1);
-                    if (currentStatus == Constants.BROADCAST_ACTION_PREV) {
+                    if (currentStatus == IntentKey.BROADCAST_ACTION_PREV) {
                         playFragment.playPrevious();
-                    } else if (currentStatus == Constants.BROADCAST_ACTION_PLAYPAUSE) {
+                    } else if (currentStatus == IntentKey.BROADCAST_ACTION_PLAYPAUSE) {
                         playFragment.getController().togglePlay();
-                    } else if (currentStatus == Constants.BROADCAST_ACTION_NEXT) {
+                    } else if (currentStatus == IntentKey.BROADCAST_ACTION_NEXT) {
                         playFragment.playNext(false);
-                    } else if (currentStatus == Constants.BROADCAST_ACTION_CLOSE) {
+                    } else if (currentStatus == IntentKey.BROADCAST_ACTION_CLOSE) {
                         playServerSwitch(false);
                         finish();
                         NotificationUtils.cancelAll();
                     }
                 }
             };
-            registerReceiver(mRemoteActionReceiver, new IntentFilter(Constants.BROADCAST_ACTION));
+            registerReceiver(mRemoteActionReceiver, new IntentFilter(IntentKey.BROADCAST_ACTION));
         } else {
             if (mRemoteActionReceiver !=null){
                 unregisterReceiver(mRemoteActionReceiver);

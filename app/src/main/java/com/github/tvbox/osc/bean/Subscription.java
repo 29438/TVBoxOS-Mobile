@@ -1,11 +1,6 @@
 package com.github.tvbox.osc.bean;
 
-/**
- * @Author : Liu XiaoRan
- * @Email : 592923276@qq.com
- * @Date : on 2023/8/16 17:15.
- * @Description :
- */
+
 public class Subscription {
     public Subscription() {
     }

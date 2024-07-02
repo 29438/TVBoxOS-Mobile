@@ -9,4 +9,7 @@
 * [q215613905](https://github.com/q215613905)/[TVBoxOS](https://github.com/q215613905/TVBoxOS)   
 
 ## Build
-[Github Actions](https://github.com/XiaoRanLiu3119/MBox-Build/actions)
+[Github Actions](https://github.com/XiaoRanLiu3119/MBox-Build/actions)   
+   
+## 提示   
+此项目仅用于学习,会在项目中进行代码调整、框架试用、试错、等等,没有标准,仅供参考

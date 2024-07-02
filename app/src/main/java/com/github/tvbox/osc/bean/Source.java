@@ -1,11 +1,5 @@
 package com.github.tvbox.osc.bean;
 
-/**
- * @Author : Liu XiaoRan
- * @Email : 592923276@qq.com
- * @Date : on 2023/9/7 16:29.
- * @Description : 仓库(多仓的单个实例),每个仓库的url都是多线路
- */
 public class Source {
 
     public Source() {

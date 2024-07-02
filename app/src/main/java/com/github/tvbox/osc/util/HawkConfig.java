@@ -16,7 +16,6 @@ public class HawkConfig {
     public static final String HOME_API = "home_api";
     public static final String DEFAULT_PARSE = "parse_default";
     public static final String DEBUG_OPEN = "debug_open";
-    public static final String PARSE_WEBVIEW = "parse_webview"; // true 系统 false xwalk
     public static final String IJK_CODEC = "ijk_codec";
     public static final String PLAY_TYPE = "play_type";//0 系统 1 ijk 2 exo 10 MXPlayer
     public static final String PLAY_RENDER = "play_render"; //0 texture 2
@@ -53,10 +52,6 @@ public class HawkConfig {
      * 后台播放模式 0 关闭,1 开启,2 画中画
      */
     public static final String BACKGROUND_PLAY_TYPE = "background_play_type";
-    /**
-     * TMDB请求token
-     */
-    public static final String TOKEN_TMDB = "token_tmdb";
     /**
      * 广告过滤
      */

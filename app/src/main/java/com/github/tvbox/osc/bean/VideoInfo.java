@@ -2,12 +2,7 @@ package com.github.tvbox.osc.bean;
 
 import android.graphics.Bitmap;
 
-/**
- * @Author : Liu XiaoRan
- * @Email : 592923276@qq.com
- * @Date : on 2023/8/15 10:32.
- * @Description :
- */
+
 public class VideoInfo {
     private boolean checked = false;
     private boolean checkBoxVisibility = false;

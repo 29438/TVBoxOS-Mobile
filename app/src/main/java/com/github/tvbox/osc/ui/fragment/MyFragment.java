@@ -15,7 +15,6 @@ import com.github.tvbox.osc.ui.activity.CollectActivity;
 import com.github.tvbox.osc.ui.activity.DetailActivity;
 import com.github.tvbox.osc.ui.activity.HistoryActivity;
 import com.github.tvbox.osc.ui.activity.LiveActivity;
-import com.github.tvbox.osc.ui.activity.LivePlayActivity;
 import com.github.tvbox.osc.ui.activity.LocalPlayActivity;
 import com.github.tvbox.osc.ui.activity.MovieFoldersActivity;
 import com.github.tvbox.osc.ui.activity.SettingActivity;
