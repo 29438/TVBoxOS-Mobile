@@ -124,12 +124,7 @@
         <meta-data
             android:name="design_height_in_dp"
             android:value="820" />
-        <meta-data
-            android:name="xwalk_enable_download_mode"
-            android:value="enable" />
-        <meta-data
-            android:name="xwalk_verify"
-            android:value="disable" /> <!-- immersionbar沉浸状态兰适配华为（huawei）刘海屏 -->
+ <!-- immersionbar沉浸状态兰适配华为（huawei）刘海屏 -->
         <meta-data
             android:name="android.notch_support"
             android:value="true" /> <!-- immersionbar沉浸状态兰适配小米（xiaomi）刘海屏 -->
