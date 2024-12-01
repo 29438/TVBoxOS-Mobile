@@ -19,7 +19,7 @@
             android:lineSpacingMultiplier="0"
             android:padding="@dimen/dp_20"
             android:singleLine="true"
-            android:textColor="@color/text_gray"
+            android:textColor="@color/text_foreground"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"

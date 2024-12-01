@@ -1,6 +1,5 @@
 package com.github.tvbox.osc.ui.adapter;
 
-import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
@@ -36,7 +35,7 @@ public class LiveChannelGroupNewAdapter extends BaseQuickAdapter<LiveChannelGrou
             tvGroupName.setTextColor(mContext.getResources().getColor(R.color.white));
             root.setBackground(mContext.getResources().getDrawable(R.drawable.bg_r_common_solid_primary));
         } else {
-            tvGroupName.setTextColor(ColorUtils.getColor(R.color.text_gray));
+            tvGroupName.setTextColor(ColorUtils.getColor(R.color.text_foreground));
             root.setBackground(mContext.getResources().getDrawable(R.drawable.bg_transparent));
         }
     }

@@ -38,9 +38,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DiffUtil;
 
+import com.blankj.utilcode.util.ColorUtils;
 import com.blankj.utilcode.util.GsonUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ScreenUtils;
+import com.blankj.utilcode.util.SpanUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.github.catvod.crawler.Spider;
 import com.github.tvbox.osc.R;
@@ -514,7 +516,6 @@ public class PlayFragment extends BaseLazyFragment {
         List<TrackInfoBean> bean = trackInfo.getAudio();
         if (bean.size() < 1) return;
         SelectDialog<TrackInfoBean> dialog = new SelectDialog<>(getActivity());
-        dialog.setShowCenter(true);
         dialog.setTip("切换音轨");
         dialog.setAdapter(new SelectDialogAdapter.SelectDialogInterface<TrackInfoBean>() {
             @Override
@@ -582,7 +583,6 @@ public class PlayFragment extends BaseLazyFragment {
         List<TrackInfoBean> bean = trackInfo.getSubtitle();
         if (bean.size() < 1) return;
         SelectDialog<TrackInfoBean> dialog = new SelectDialog<>(mActivity);
-        dialog.setShowCenter(true);
         dialog.setTip("切换内置字幕");
         dialog.setAdapter(new SelectDialogAdapter.SelectDialogInterface<TrackInfoBean>() {
             @Override
@@ -645,13 +645,26 @@ public class PlayFragment extends BaseLazyFragment {
 
     void setTip(String msg, boolean loading, boolean err) {
         if (!isAdded()) return;
-        requireActivity().runOnUiThread(new Runnable() { //影魔
-            @Override
-            public void run() {
-                mPlayLoadTip.setText(msg);
-                mPlayLoadTip.setVisibility(View.VISIBLE);
-                mPlayLoading.setVisibility(loading ? View.VISIBLE : View.GONE);
-                mPlayLoadErr.setVisibility(err ? View.VISIBLE : View.GONE);
+        //影魔
+        requireActivity().runOnUiThread(() -> {
+            mPlayLoadTip.setText(msg);
+            mPlayLoadTip.setVisibility(View.VISIBLE);
+            mPlayLoading.setVisibility(loading ? View.VISIBLE : View.GONE);
+            mPlayLoadErr.setVisibility(err ? View.VISIBLE : View.GONE);
+
+            if ("视频播放出错".equals(msg)){
+                if (!retriedSwitchPlayer){
+                    ToastUtils.showShort("播放出错,正在尝试切换播放器");
+                    retriedSwitchPlayer = true;
+                    mController.mPlayerBtn.performClick();
+                }else {
+                    SpanUtils.with(mPlayLoadTip)
+                            .append("视频播放出错，")
+                            .append("切换播放器")
+                            .setClickSpan(ColorUtils.getColor(R.color.orange), false, view -> {
+                                mController.mPlayerBtn.performClick();
+                            }).create();
+                }
             }
         });
     }
@@ -670,11 +683,6 @@ public class PlayFragment extends BaseLazyFragment {
                     if (finish) {
                         Toast.makeText(mContext, err, Toast.LENGTH_SHORT).show();
                     } else {
-                        if (err.equals("视频播放出错") && !retriedSwitchPlayer){
-                            ToastUtils.showShort("播放出错,正在尝试切换播放器");
-                            retriedSwitchPlayer = true;
-                            mController.mPlayerBtn.performClick();
-                        }
                         setTip(err, false, true);
                     }
                 }

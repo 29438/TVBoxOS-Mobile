@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:text="倒序"
             android:drawableRight="@drawable/ic_sort_18"
-            android:textColor="@color/text_gray"
+            android:textColor="@color/text_foreground"
             android:drawablePadding="4dp"
             android:paddingVertical="6dp"
             android:layout_marginRight="20dp"

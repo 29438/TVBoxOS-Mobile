@@ -14,7 +14,7 @@
         app:rightIcon="@drawable/ic_filter_list"
         app:rightIconHeight="20dp"
         app:rightIconWidth="20dp"
-        app:rightIconTint="@color/text_gray"
+        app:rightIconTint="@color/text_foreground"
         />
 
     <androidx.appcompat.widget.LinearLayoutCompat

@@ -21,7 +21,7 @@
             android:lineSpacingExtra="@dimen/ts_50"
             android:lineSpacingMultiplier="0"
             android:text="下载XWalkView运行组件"
-            android:textColor="@color/text_gray"
+            android:textColor="@color/text_foreground"
              />
 
         <TextView

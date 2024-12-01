@@ -17,7 +17,8 @@
     <!--    通用颜色-->
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="text_gray">#FF302F2D</color>
+    <color name="text_foreground">#050505</color>
+    <color name="text_sub_foreground">#787878</color>
     <color name="light_gray_color">#e6e6e6</color>
     <!--    警示黄色-->
     <color name="warn">#ffcb6b</color>
@@ -26,7 +27,7 @@
     <color name="disable_text">#b3b3b3</color>
 
     <!--    带点透明度(e6 90/100不透明)的pop-->
-    <color name="bg_popup">#f2FFFFFF</color>
+    <color name="bg_popup">#FFFFFF</color>
 
     <!--    制定颜色-->
     <!--    页面背景色,activity.fragment等-->

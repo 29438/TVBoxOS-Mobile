@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:maxLines="2"
             android:ellipsize="end"
-            android:textColor="@color/text_gray"
+            android:textColor="@color/text_foreground"
             android:textStyle="bold"
             android:textSize="18sp"
             android:text="TMDB: 片名"/>

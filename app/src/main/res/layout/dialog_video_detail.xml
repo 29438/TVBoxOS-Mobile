@@ -53,7 +53,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="鬼灭之刃"
         android:layout_marginTop="20dp"
-        android:textColor="@color/text_gray"/>
+        android:textColor="@color/text_foreground"/>
 
     <TextView
         android:id="@+id/tv_year"

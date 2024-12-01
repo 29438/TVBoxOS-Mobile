@@ -12,7 +12,6 @@ import com.github.tvbox.osc.databinding.DialogPlayingControlBinding;
 import com.github.tvbox.osc.player.MyVideoView;
 import com.github.tvbox.osc.player.controller.VodController;
 import com.github.tvbox.osc.ui.activity.DetailActivity;
-import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.core.DrawerPopupView;
 
 import org.jetbrains.annotations.NotNull;
@@ -147,7 +146,7 @@ public class PlayingControlRightDialog extends DrawerPopupView {
                 tv.setTextColor(ColorUtils.getColor(R.color.white));
             }else {
                 tv.setBackground(getResources().getDrawable(R.drawable.bg_r_common_stroke_primary));
-                tv.setTextColor(ColorUtils.getColor(R.color.text_gray));
+                tv.setTextColor(ColorUtils.getColor(R.color.text_foreground));
             }
         }
     }

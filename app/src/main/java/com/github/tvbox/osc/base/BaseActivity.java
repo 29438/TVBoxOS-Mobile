@@ -22,6 +22,7 @@ import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.ui.activity.DetailActivity;
 import com.github.tvbox.osc.util.AppManager;
 import com.github.tvbox.osc.util.HawkConfig;
+import com.github.tvbox.osc.util.Utils;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
@@ -80,7 +81,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
 
     private void initStatusBar(){
         ImmersionBar.with(this)
-                .statusBarDarkFont(true)
+                .statusBarDarkFont(!Utils.isDarkTheme())
                 .titleBar(findTitleBar(getWindow().getDecorView().findViewById(android.R.id.content)))
                 .navigationBarColor(R.color.white)
                 .init();

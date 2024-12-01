@@ -31,7 +31,7 @@
                 android:maxWidth="110dp"
                 android:text="@string/app_name"
                 android:textAlignment="gravity"
-                android:textColor="@color/text_gray"
+                android:textColor="@color/text_foreground"
                 android:textSize="16dp"
                 android:drawablePadding="6dp"
                 android:singleLine="true"

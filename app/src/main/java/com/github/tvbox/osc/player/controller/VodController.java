@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -18,15 +19,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
-import com.blankj.utilcode.util.LogUtils;
-import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.api.ApiConfig;
 import com.github.tvbox.osc.bean.IJKCode;
 import com.github.tvbox.osc.bean.ParseBean;
-import com.github.tvbox.osc.constant.CacheConst;
 import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.subtitle.widget.SimpleSubtitleView;
 import com.github.tvbox.osc.ui.adapter.ParseAdapter;
@@ -76,21 +73,21 @@ public class VodController extends BaseController {
                         break;
                     }
                     case 1002: { // 显示底部菜单
-                        mBottomRoot.setVisibility(VISIBLE);
-                        mTopRoot1.setVisibility(VISIBLE);
-                        mTopRoot2.setVisibility(VISIBLE);
+                        toggleViewShowWithAlpha(mBottomRoot, true);
+                        toggleViewShowWithAlpha(mTopRoot1, true);
+                        toggleViewShowWithAlpha(mTopRoot2, true);
                         if (!isLock){// 未上锁,随底部显示
-                            mLockView.setVisibility(VISIBLE);
+                            toggleViewShowWithAlpha(mLockView, true);
                         }
                         mNextBtn.requestFocus();
                         break;
                     }
                     case 1003: { // 隐藏底部菜单
-                        mBottomRoot.setVisibility(GONE);
-                        mTopRoot1.setVisibility(GONE);
-                        mTopRoot2.setVisibility(GONE);
-                        if (!isLock){// 未上锁,随底部隐藏
-                            mLockView.setVisibility(GONE);
+                        toggleViewShowWithAlpha(mBottomRoot, false);
+                        toggleViewShowWithAlpha(mTopRoot1, false);
+                        toggleViewShowWithAlpha(mTopRoot2, false);
+                        if (!isLock){// 未上锁,随底部显示
+                            toggleViewShowWithAlpha(mLockView, false);
                         }
                         if (listener != null) {
                             listener.onHideBottom();
@@ -1090,6 +1087,24 @@ public class VodController extends BaseController {
             listener.updatePlayerCfg();
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void toggleViewShowWithAlpha(View view, boolean show) {
+        if (show) {
+            view.setVisibility(View.VISIBLE);
+            view.animate()
+                    .alpha(1.0f)
+                    .setDuration(100)
+                    .setInterpolator(new AccelerateInterpolator())
+                    .start();
+        } else {
+            view.animate()
+                    .alpha(0.0f)
+                    .setDuration(100)
+                    .setInterpolator(new AccelerateInterpolator())
+                    .withEndAction(() -> view.setVisibility(View.GONE))
+                    .start();
         }
     }
 }

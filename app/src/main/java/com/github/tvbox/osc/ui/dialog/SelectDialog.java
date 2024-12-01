@@ -22,11 +22,6 @@ import java.util.List;
 
 public class SelectDialog<T> extends BaseDialog {
 
-    /**
-     * 居中显示/默认底部
-     */
-    boolean isShowCenter;
-
     public SelectDialog(@NonNull @NotNull Context context) {
         super(context);
         setContentView(R.layout.dialog_select);
@@ -40,22 +35,14 @@ public class SelectDialog<T> extends BaseDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (isShowCenter){
-            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-            lp.copyFrom(getWindow().getAttributes());
-            lp.gravity = Gravity.CENTER;
-            lp.width = ConvertUtils.dp2px(330);
 
-            getWindow().setAttributes(lp);
-            getWindow().setWindowAnimations(R.style.DialogFadeAnimation); // Set the animation style
-            findViewById(R.id.cl_root).setBackground(getContext().getResources().getDrawable(R.drawable.bg_large_round_gray));
-        }
-        findViewById(R.id.iv_close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(getWindow().getAttributes());
+        lp.gravity = Gravity.CENTER;
+        lp.width = ConvertUtils.dp2px(330);
+        getWindow().setAttributes(lp);
+        getWindow().setWindowAnimations(R.style.DialogFadeAnimation); // Set the animation style
+        findViewById(R.id.iv_close).setOnClickListener(view -> dismiss());
     }
 
     public void setTip(String tip) {
@@ -75,9 +62,5 @@ public class SelectDialog<T> extends BaseDialog {
                 tvRecyclerView.setSelectionWithSmooth(select);
             }
         });
-    }
-
-    public void setShowCenter(boolean showCenter) {
-        isShowCenter = showCenter;
     }
 }

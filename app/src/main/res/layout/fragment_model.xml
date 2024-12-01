@@ -52,7 +52,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="主页内容"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"/>
 
                     <Space
@@ -73,7 +73,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.75"
                         android:src="@drawable/icon_pre"
-                        app:tint="@color/text_gray"/>
+                        app:tint="@color/text_foreground"/>
                 </LinearLayout>
 
 
@@ -92,7 +92,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="聚合模式"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
 
@@ -114,7 +114,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.75"
                         android:src="@drawable/icon_pre"
-                        app:tint="@color/text_gray"/>
+                        app:tint="@color/text_foreground"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -133,7 +133,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="主题颜色"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
 
@@ -154,7 +154,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.75"
                         android:src="@drawable/icon_pre"
-                        app:tint="@color/text_gray"/>
+                        app:tint="@color/text_foreground"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -172,7 +172,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="直播源"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
 
@@ -187,7 +187,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.75"
                         android:src="@drawable/icon_pre"
-                        app:tint="@color/text_gray"/>
+                        app:tint="@color/text_foreground"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -205,7 +205,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="无痕浏览"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
 
@@ -244,7 +244,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="播放器"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
 
@@ -265,7 +265,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.75"
                         android:src="@drawable/icon_pre"
-                        app:tint="@color/text_gray"/>
+                        app:tint="@color/text_foreground"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -282,7 +282,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="广告过滤"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"/>
 
                     <Space
@@ -312,7 +312,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="长按倍速"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
 
@@ -334,7 +334,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.75"
                         android:src="@drawable/icon_pre"
-                        app:tint="@color/text_gray"/>
+                        app:tint="@color/text_foreground"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -352,7 +352,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="后台播放"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
 
@@ -373,7 +373,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.75"
                         android:src="@drawable/icon_pre"
-                        app:tint="@color/text_gray"/>
+                        app:tint="@color/text_foreground"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -390,7 +390,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="IJK解码方式"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
 
@@ -411,7 +411,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.75"
                         android:src="@drawable/icon_pre"
-                        app:tint="@color/text_gray"/>
+                        app:tint="@color/text_foreground"/>
                 </LinearLayout>
 
 
@@ -428,7 +428,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="渲染方式"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
 
@@ -450,7 +450,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.75"
                         android:src="@drawable/icon_pre"
-                        app:tint="@color/text_gray"/>
+                        app:tint="@color/text_foreground"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -466,7 +466,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="画面缩放"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
 
@@ -488,7 +488,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.75"
                         android:src="@drawable/icon_pre"
-                        app:tint="@color/text_gray"/>
+                        app:tint="@color/text_foreground"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -505,7 +505,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="IJK缓存"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"/>
 
                     <Space
@@ -545,7 +545,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="调试模式"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
 
@@ -568,7 +568,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.75"
                         android:src="@drawable/icon_pre"
-                        app:tint="@color/text_gray"/>
+                        app:tint="@color/text_foreground"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -585,7 +585,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="数据备份还原"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"/>
 
                     <Space
@@ -599,7 +599,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.75"
                         android:src="@drawable/icon_pre"
-                        app:tint="@color/text_gray"/>
+                        app:tint="@color/text_foreground"/>
                 </LinearLayout>
 
 
@@ -617,7 +617,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="安全DNS"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"/>
 
                     <Space
@@ -637,7 +637,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.75"
                         android:src="@drawable/icon_pre"
-                        app:tint="@color/text_gray"/>
+                        app:tint="@color/text_foreground"/>
                 </LinearLayout>
 
 
@@ -657,7 +657,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="嗅探Webview"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
 
@@ -679,7 +679,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.75"
                         android:src="@drawable/icon_pre"
-                        app:tint="@color/text_gray"/>
+                        app:tint="@color/text_foreground"/>
                 </LinearLayout>
 
 
@@ -699,7 +699,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="搜索附近TVBox"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
 
@@ -721,7 +721,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.75"
                         android:src="@drawable/icon_pre"
-                        app:tint="@color/text_gray"/>
+                        app:tint="@color/text_foreground"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -738,7 +738,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="TMDB配置"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"/>
 
                     <Space
@@ -752,7 +752,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.75"
                         android:src="@drawable/icon_pre"
-                        app:tint="@color/text_gray"/>
+                        app:tint="@color/text_foreground"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -769,7 +769,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="历史记录"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
 
@@ -791,7 +791,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.75"
                         android:src="@drawable/icon_pre"
-                        app:tint="@color/text_gray"/>
+                        app:tint="@color/text_foreground"/>
                 </LinearLayout>
 
 
@@ -809,7 +809,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="清空缓存"
-                        android:textColor="@color/text_gray"
+                        android:textColor="@color/text_foreground"
                         android:textSize="16sp"
                         />
 
@@ -824,7 +824,7 @@
                         android:layout_gravity="center"
                         android:alpha="0.75"
                         android:src="@drawable/icon_pre"
-                        app:tint="@color/text_gray"/>
+                        app:tint="@color/text_foreground"/>
                 </LinearLayout>
 
             </LinearLayout>

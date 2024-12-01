@@ -42,13 +42,13 @@
             android:layout_height="40dp"
             android:padding="4dp"
             android:src="@drawable/ic_filter_list"
-            app:tint="@color/text_gray"
+            app:tint="@color/text_foreground"
             android:layout_marginRight="4dp"/>
 
         <View
             android:layout_width="2dp"
             android:layout_height="18dp"
-            android:background="@color/text_gray"/>
+            android:background="@color/text_foreground"/>
 
         <ImageView
             android:id="@+id/iv_search"
@@ -56,7 +56,7 @@
             android:layout_height="40dp"
             android:src="@drawable/ic_search"
             android:paddingHorizontal="6dp"
-            app:tint="@color/text_gray"/>
+            app:tint="@color/text_foreground"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/llSearchSuggest"
