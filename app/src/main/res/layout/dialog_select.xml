@@ -51,7 +51,8 @@
             app:tv_layoutManager="V7LinearLayoutManager"
             app:tv_selectedItemIsCentered="true"
             app:tv_horizontalSpacingWithMargins="@dimen/dp_10"
-            app:tv_verticalSpacingWithMargins="@dimen/dp_10" />
+            app:tv_verticalSpacingWithMargins="@dimen/dp_10"
+            android:paddingBottom="10dp"/>
 
         <View
             android:layout_width="match_parent"

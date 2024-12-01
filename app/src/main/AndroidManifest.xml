@@ -71,17 +71,10 @@
             android:launchMode="singleTop"
             android:configChanges="orientation|screenSize|keyboardHidden|uiMode|screenLayout"/>
         <activity
-            android:name=".ui.activity.LivePlayActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="sensorLandscape" />
-        <activity
             android:name=".ui.activity.DetailActivity"
             android:supportsPictureInPicture="true"
             android:launchMode="singleTask"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|uiMode"/>
-        <activity
-            android:name=".ui.activity.SearchActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
             android:name=".ui.activity.FastSearchActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
@@ -124,7 +117,6 @@
             android:exported="false"
             android:foregroundServiceType="mediaPlayback" />
 
-
         <!-- autosize设计尺寸 -->
         <meta-data
             android:name="design_width_in_dp"
@@ -132,23 +124,13 @@
         <meta-data
             android:name="design_height_in_dp"
             android:value="820" />
-        <meta-data
-            android:name="xwalk_enable_download_mode"
-            android:value="enable" />
-        <meta-data
-            android:name="xwalk_verify"
-            android:value="disable" /> <!-- immersionbar沉浸状态兰适配华为（huawei）刘海屏 -->
+ <!-- immersionbar沉浸状态兰适配华为（huawei）刘海屏 -->
         <meta-data
             android:name="android.notch_support"
             android:value="true" /> <!-- immersionbar沉浸状态兰适配小米（xiaomi）刘海屏 -->
         <meta-data
             android:name="notch.config"
             android:value="portrait|landscape" />
-
-        <!-- 告知 XXPermissions 当前项目已经适配了分区存储特性 -->
-        <meta-data
-            android:name="ScopedStorage"
-            android:value="true" />
     </application>
 
 </manifest>

@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--应用的主要色调,actionBar默认使用该颜色,Toolbar导航栏的底色-->
-    <color name="colorPrimary">#BB86FC</color>
-    <!--CheckBox,RadioButton,SwitchCompat等一般控件的选中效果默认采用该颜色-->
-    <color name="colorAccent">#7e4ceb</color>
-
     <color name="bg_gray">#212121</color>
     <color name="bg_popup">#2a2d32</color>
 

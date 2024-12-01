@@ -47,7 +47,7 @@ public class SearchCheckboxDialog extends BaseDialog{
         mSourceList = sourceList;
         mCheckSourcees = checkedSources;
         setContentView(R.layout.dialog_checkbox_search);
-        initView(context);
+        initView();
     }
 
     @Override
@@ -56,7 +56,7 @@ public class SearchCheckboxDialog extends BaseDialog{
         super.dismiss();
     }
 
-    protected void initView(Context context) {
+    protected void initView() {
         mGridView = findViewById(R.id.mGridView);
         checkAll = findViewById(R.id.checkAll);
         clearAll = findViewById(R.id.clearAll);

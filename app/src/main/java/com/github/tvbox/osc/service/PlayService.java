@@ -20,7 +20,7 @@ import androidx.core.graphics.drawable.IconCompat;
 import com.blankj.utilcode.util.LogUtils;
 import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.base.App;
-import com.github.tvbox.osc.constant.Constants;
+import com.github.tvbox.osc.constant.IntentKey;
 import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.player.MyVideoView;
 import com.github.tvbox.osc.ui.activity.DetailActivity;
@@ -87,10 +87,10 @@ public class PlayService extends Service {
         remoteViews.setTextViewText(R.id.tv_subtitle, "正在播放: "+episodes);
         remoteViews.setImageViewResource(R.id.iv_play_pause,videoView.isPlaying()?R.drawable.ic_notify_pause:R.drawable.ic_notify_play);
         // 创建通知栏操作
-        remoteViews.setOnClickPendingIntent(R.id.iv_previous, getPendingIntent(Constants.BROADCAST_ACTION_PREV));
-        remoteViews.setOnClickPendingIntent(R.id.iv_play_pause, getPendingIntent(Constants.BROADCAST_ACTION_PLAYPAUSE));
-        remoteViews.setOnClickPendingIntent(R.id.iv_next, getPendingIntent(Constants.BROADCAST_ACTION_NEXT));
-        remoteViews.setOnClickPendingIntent(R.id.iv_close, getPendingIntent(Constants.BROADCAST_ACTION_CLOSE));
+        remoteViews.setOnClickPendingIntent(R.id.iv_previous, getPendingIntent(IntentKey.BROADCAST_ACTION_PREV));
+        remoteViews.setOnClickPendingIntent(R.id.iv_play_pause, getPendingIntent(IntentKey.BROADCAST_ACTION_PLAYPAUSE));
+        remoteViews.setOnClickPendingIntent(R.id.iv_next, getPendingIntent(IntentKey.BROADCAST_ACTION_NEXT));
+        remoteViews.setOnClickPendingIntent(R.id.iv_close, getPendingIntent(IntentKey.BROADCAST_ACTION_CLOSE));
 
         // 普通布局
         RemoteViews remoteViewsSmall = new RemoteViews(getPackageName(), R.layout.notification_player_small);
@@ -114,7 +114,7 @@ public class PlayService extends Service {
         return PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
     public static PendingIntent getPendingIntent(int actionCode) {
-        return PendingIntent.getBroadcast(App.getInstance(), actionCode, new Intent(Constants.BROADCAST_ACTION).putExtra("action", actionCode).setPackage(App.getInstance().getPackageName()),PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getBroadcast(App.getInstance(), actionCode, new Intent(IntentKey.BROADCAST_ACTION).putExtra("action", actionCode).setPackage(App.getInstance().getPackageName()),PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     @Override

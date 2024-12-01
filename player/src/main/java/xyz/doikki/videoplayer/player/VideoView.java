@@ -410,7 +410,7 @@ public class VideoView<P extends AbstractPlayer> extends FrameLayout
     /**
      * 是否处于播放状态
      */
-    protected boolean isInPlaybackState() {
+    public boolean isInPlaybackState() {
         return mMediaPlayer != null
                 && mCurrentPlayState != STATE_ERROR
                 && mCurrentPlayState != STATE_IDLE

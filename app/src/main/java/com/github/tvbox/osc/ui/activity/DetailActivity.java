@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.PictureInPictureParams;
 import android.app.RemoteAction;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,6 +29,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.NotificationUtils;
@@ -46,7 +48,7 @@ import com.github.tvbox.osc.bean.ParseBean;
 import com.github.tvbox.osc.bean.SourceBean;
 import com.github.tvbox.osc.bean.VodInfo;
 import com.github.tvbox.osc.cache.RoomDataManger;
-import com.github.tvbox.osc.constant.Constants;
+import com.github.tvbox.osc.constant.IntentKey;
 import com.github.tvbox.osc.databinding.ActivityDetailBinding;
 import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.receiver.BatteryReceiver;
@@ -63,6 +65,7 @@ import com.github.tvbox.osc.ui.fragment.PlayFragment;
 import com.github.tvbox.osc.ui.widget.LinearSpacingItemDecoration;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
 import com.github.tvbox.osc.util.HawkConfig;
+import com.github.tvbox.osc.util.ScreenShotListenManager;
 import com.github.tvbox.osc.util.SearchHelper;
 import com.github.tvbox.osc.util.SubtitleHelper;
 import com.github.tvbox.osc.util.Utils;
@@ -74,6 +77,7 @@ import com.gyf.immersionbar.ImmersionBar;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.enums.PopupPosition;
+import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.AbsCallback;
 import com.lzy.okgo.model.Response;
@@ -114,7 +118,7 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
     public String sourceKey;
     private View seriesFlagFocus = null;
     private boolean isReverse;
-    private String preFlag="";
+    private String preFlag = "";
     private HashMap<String, String> mCheckSources = null;
     BatteryReceiver mBatteryReceiver = new BatteryReceiver();
     //改为view模式无法自动响应返回键操作,onBackPress时手动dismiss
@@ -130,19 +134,25 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
     boolean openBackgroundPlay;
     private BroadcastReceiver mRemoteActionReceiver;
 
+    /**
+     * 截屏监听
+     */
+    ScreenShotListenManager screenShotListenManager;
+
     @Override
     protected void init() {
         initReceiver();
         initView();
         initViewModel();
         initData();
-        registerReceiver(mBatteryReceiver,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        registerReceiver(mBatteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         ImmersionBar.with(this)
                 .statusBarColor(R.color.black)
                 .navigationBarColor(R.color.white)
                 .fitsSystemWindows(true)
                 .statusBarDarkFont(false)
                 .init();
+        toggleScreenShotListen(true);
     }
 
     @Override
@@ -150,22 +160,21 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
         super.onResume();
         openBackgroundPlay = false;
         playServerSwitch(false);
-        mBinding.ivPrivateBrowsing.postDelayed(NotificationUtils::cancelAll,800);
+        mBinding.ivPrivateBrowsing.postDelayed(NotificationUtils::cancelAll, 800);
     }
 
     private void initView() {
-        mBinding.ivPrivateBrowsing.setVisibility(Hawk.get(HawkConfig.PRIVATE_BROWSING, false)?View.VISIBLE:View.GONE);
+        mBinding.ivPrivateBrowsing.setVisibility(Hawk.get(HawkConfig.PRIVATE_BROWSING, false) ? View.VISIBLE : View.GONE);
         mBinding.ivPrivateBrowsing.setOnClickListener(view -> ToastUtils.showShort("当前为无痕浏览"));
         mBinding.previewPlayerPlace.setVisibility(showPreview ? View.VISIBLE : View.GONE);
 
         mBinding.mGridView.setHasFixedSize(true);
-        mBinding.mGridView.setLayoutManager(new V7LinearLayoutManager(this.mContext,0,false));
-        mBinding.mGridView.addItemDecoration(new LinearSpacingItemDecoration(20,false));
+        mBinding.mGridView.setLayoutManager(new V7LinearLayoutManager(this.mContext, 0, false));
+        mBinding.mGridView.addItemDecoration(new LinearSpacingItemDecoration(20, false));
 
         seriesAdapter = new SeriesAdapter(false);
         mBinding.mGridView.setAdapter(seriesAdapter);
         mBinding.mGridViewFlag.setHasFixedSize(true);
-        mBinding.mGridViewFlag.setLayoutManager(new V7LinearLayoutManager(this.mContext, 0, false));
         seriesFlagAdapter = new SeriesFlagAdapter();
         mBinding.mGridViewFlag.setAdapter(seriesFlagAdapter);
         isReverse = false;
@@ -223,7 +232,7 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 FastClickCheckUtil.check(view);
-                chooseSeries(position,false);
+                chooseSeries(position, false);
             }
         });
 
@@ -269,12 +278,12 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
     @Override
     protected void onPause() {
         super.onPause();
-        if (openBackgroundPlay){
+        if (openBackgroundPlay) {
             playServerSwitch(true);
         }
     }
 
-    private void initReceiver(){
+    private void initReceiver() {
         // 注册广播接收器
         if (mHomeKeyReceiver == null) {
             mHomeKeyReceiver = new BroadcastReceiver() {
@@ -298,7 +307,7 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
             vodInfo.reverseSort = !vodInfo.reverseSort;
             isReverse = !isReverse;
             vodInfo.reverse();
-            vodInfo.playIndex=(vodInfo.seriesMap.get(vodInfo.playFlag).size()-1)-vodInfo.playIndex;
+            vodInfo.playIndex = (vodInfo.seriesMap.get(vodInfo.playFlag).size() - 1) - vodInfo.playIndex;
 //                    insertVod(sourceKey, vodInfo);
 
             seriesAdapter.notifyDataSetChanged();
@@ -310,13 +319,13 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
         VodInfo.VodSeries vodSeries = vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex);
         new XPopup.Builder(this)
                 .maxWidth(ConvertUtils.dp2px(360))
-                .asCustom(new CastListDialog(this,new CastVideo(vodSeries.name
-                        ,TextUtils.isEmpty(playFragment.getFinalUrl())?vodSeries.url:playFragment.getFinalUrl())))
+                .asCustom(new CastListDialog(this, new CastVideo(vodSeries.name
+                        , TextUtils.isEmpty(playFragment.getFinalUrl()) ? vodSeries.url : playFragment.getFinalUrl())))
                 .show();
     }
 
-    public void showAllSeriesDialog(){
-        if (fullWindows){
+    public void showAllSeriesDialog() {
+        if (fullWindows) {
             mAllSeriesRightDialog = new XPopup.Builder(this)
                     .isViewMode(true)//隐藏导航栏(手势条)在dialog模式下会闪一下,改为view模式,但需处理onBackPress的隐藏,下方同理
                     .hasNavigationBar(false)
@@ -325,19 +334,19 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
                     .enableDrag(false)//禁用拖拽,内部有横向rv
                     .asCustom(new AllVodSeriesRightDialog(this));
             mAllSeriesRightDialog.show();
-        }else {
+        } else {
             mAllSeriesBottomDialog = new XPopup.Builder(this)
                     .isViewMode(true)
                     .hasNavigationBar(false)
                     .maxHeight(ScreenUtils.getScreenHeight() - (ScreenUtils.getScreenHeight() / 4))
                     .asCustom(new AllVodSeriesBottomDialog(this, seriesAdapter.getData(), (position, text) -> {
-                        chooseSeries(position,false);
+                        chooseSeries(position, false);
                     }));
             mAllSeriesBottomDialog.show();
         }
     }
 
-    private void chooseFlag(int position){
+    private void chooseFlag(int position) {
         //新选中的flag
         String newFlag = seriesFlagAdapter.getData().get(position).name;
         if (vodInfo != null && !vodInfo.playFlag.equals(newFlag)) {
@@ -363,7 +372,7 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
         }
     }
 
-    private void chooseSeries(int position,boolean reloadWithChangeLine){
+    private void chooseSeries(int position, boolean reloadWithChangeLine) {
         if (vodInfo != null && vodInfo.seriesMap.get(vodInfo.playFlag).size() > 0) {
             boolean reload = false;
             for (int j = 0; j < vodInfo.seriesMap.get(vodInfo.playFlag).size(); j++) {
@@ -440,19 +449,20 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
     @SuppressLint("NotifyDataSetChanged")
     void refreshList() {
         int seriesSize = vodInfo.seriesMap.get(vodInfo.playFlag).size();
-        if (seriesSize>0 && seriesSize <= vodInfo.playIndex) {//当前集数大于新选线路的总集数,设置为最后一集
+        if (seriesSize > 0 && seriesSize <= vodInfo.playIndex) {//当前集数大于新选线路的总集数,设置为最后一集
             vodInfo.playIndex = seriesSize - 1;
         }
 
         if (vodInfo.seriesMap.get(vodInfo.playFlag) != null) {
             boolean canSelect = true;
             for (int j = 0; j < vodInfo.seriesMap.get(vodInfo.playFlag).size(); j++) {
-                if(vodInfo.seriesMap.get(vodInfo.playFlag).get(j).selected){
+                if (vodInfo.seriesMap.get(vodInfo.playFlag).get(j).selected) {
                     canSelect = false;
                     break;
                 }
             }
-            if(canSelect)vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex).selected = true;
+            if (canSelect)
+                vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex).selected = true;
         }
         seriesAdapter.setNewData(vodInfo.seriesMap.get(vodInfo.playFlag));
 
@@ -470,9 +480,9 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
                     vodInfo.setVideo(mVideo);
                     vodInfo.sourceKey = mVideo.sourceKey;
 
-                    mBinding.tvName.setText(TextUtils.isEmpty(mVideo.name)?"暂无信息":mVideo.name);
+                    mBinding.tvName.setText(TextUtils.isEmpty(mVideo.name) ? "暂无信息" : mVideo.name);
                     String srcName = ApiConfig.get().getSource(mVideo.sourceKey).getName();
-                    mBinding.tvSite.setText("来源："+(TextUtils.isEmpty(srcName)?"未知":srcName));
+                    mBinding.tvSite.setText("来源：" + (TextUtils.isEmpty(srcName) ? "未知" : srcName));
 
                     if (vodInfo.seriesMap != null && vodInfo.seriesMap.size() > 0) {//线路
                         mBinding.mGridViewFlag.setVisibility(View.VISIBLE);
@@ -750,19 +760,20 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
         OkGo.getInstance().cancelTag("fenci");
         OkGo.getInstance().cancelTag("detail");
         OkGo.getInstance().cancelTag("quick_search");
+        toggleScreenShotListen(false);
     }
 
     @Override
     public void onBackPressed() {
-        if (mAllSeriesRightDialog!=null && mAllSeriesRightDialog.isShow()){
+        if (mAllSeriesRightDialog != null && mAllSeriesRightDialog.isShow()) {
             mAllSeriesRightDialog.dismiss();
             return;
         }
-        if (mAllSeriesBottomDialog!=null && mAllSeriesBottomDialog.isShow()){
+        if (mAllSeriesBottomDialog != null && mAllSeriesBottomDialog.isShow()) {
             mAllSeriesBottomDialog.dismiss();
             return;
         }
-        if (playFragment.hideAllDialogSuccess()){//fragment有弹窗隐藏并拦截返回
+        if (playFragment.hideAllDialogSuccess()) {//fragment有弹窗隐藏并拦截返回
             return;
         }
         if (fullWindows) {
@@ -785,7 +796,8 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
 
     // preview
     VodInfo previewVodInfo = null;
-    boolean showPreview = Hawk.get(HawkConfig.SHOW_PREVIEW, true);; // true 开启 false 关闭
+    boolean showPreview = Hawk.get(HawkConfig.SHOW_PREVIEW, true);
+    ; // true 开启 false 关闭
     boolean fullWindows = false;
     ViewGroup.LayoutParams windowsPreview = null;
     ViewGroup.LayoutParams windowsFull = null;
@@ -813,7 +825,7 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
     }
 
     void toggleSubtitleTextSize() {
-        int subtitleTextSize  = SubtitleHelper.getTextSize(this);
+        int subtitleTextSize = SubtitleHelper.getTextSize(this);
         if (!fullWindows) {
             subtitleTextSize *= 0.6;
         }
@@ -821,13 +833,13 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
     }
 
     public void use1DMDownload() {
-        if (vodInfo != null && vodInfo.seriesMap.get(vodInfo.playFlag).size() > 0){
+        if (vodInfo != null && vodInfo.seriesMap.get(vodInfo.playFlag).size() > 0) {
             VodInfo.VodSeries vod = vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex);
-            String url = TextUtils.isEmpty(playFragment.getFinalUrl())?vod.url:playFragment.getFinalUrl();
+            String url = TextUtils.isEmpty(playFragment.getFinalUrl()) ? vod.url : playFragment.getFinalUrl();
             // 创建Intent对象，启动1DM App
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             intent.setDataAndType(Uri.parse(url), "video/mp4");
-            intent.putExtra("title", vodInfo.name+" "+vod.name); // 传入文件保存名
+            intent.putExtra("title", vodInfo.name + " " + vod.name); // 传入文件保存名
 //            intent.setClassName("idm.internet.download.manager.plus", "idm.internet.download.manager.MainActivity");
             intent.setClassName("idm.internet.download.manager.plus", "idm.internet.download.manager.Downloader");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -883,9 +895,9 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
                 ratio = new Rational(16, 9);
             }
             List<RemoteAction> actions = new ArrayList<>();
-            actions.add(generateRemoteAction(android.R.drawable.ic_media_previous, Constants.BROADCAST_ACTION_PREV, "Prev", "Play Previous"));
-            actions.add(generateRemoteAction(android.R.drawable.ic_media_play, Constants.BROADCAST_ACTION_PLAYPAUSE, "Play", "Play/Pause"));
-            actions.add(generateRemoteAction(android.R.drawable.ic_media_next, Constants.BROADCAST_ACTION_NEXT, "Next", "Play Next"));
+            actions.add(generateRemoteAction(android.R.drawable.ic_media_previous, IntentKey.BROADCAST_ACTION_PREV, "Prev", "Play Previous"));
+            actions.add(generateRemoteAction(android.R.drawable.ic_media_play, IntentKey.BROADCAST_ACTION_PLAYPAUSE, "Play", "Play/Pause"));
+            actions.add(generateRemoteAction(android.R.drawable.ic_media_next, IntentKey.BROADCAST_ACTION_NEXT, "Next", "Play Next"));
             PictureInPictureParams params = new PictureInPictureParams.Builder()
                     .setAspectRatio(ratio)
                     .setActions(actions).build();
@@ -893,15 +905,15 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
                 if (!fullWindows) {
                     toggleFullPreview();
                 }
-            },300);
+            }, 300);
             enterPictureInPictureMode(params);
             playFragment.getController().hideBottom();
 
             playFragment.getPlayer().postDelayed(() -> {
-                if (!playFragment.getPlayer().isPlaying()){
+                if (!playFragment.getPlayer().isPlaying()) {
                     playFragment.getController().togglePlay();
                 }
-            },400);
+            }, 400);
         }
     }
 
@@ -911,7 +923,7 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
                 PendingIntent.getBroadcast(
                         DetailActivity.this,
                         actionCode,
-                        new Intent(Constants.BROADCAST_ACTION).putExtra("action", actionCode),
+                        new Intent(IntentKey.BROADCAST_ACTION).putExtra("action", actionCode),
                         0);
         final Icon icon = Icon.createWithResource(DetailActivity.this, iconResId);
         return (new RemoteAction(icon, title, desc, intent));
@@ -921,37 +933,37 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
      * 事件接收广播(画中画/后台播放点击事件)
      * @param isRegister 注册/注销
      */
-    private void registerActionReceiver(boolean isRegister){
+    private void registerActionReceiver(boolean isRegister) {
         if (isRegister) {
             mRemoteActionReceiver = new BroadcastReceiver() {
 
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    if (intent == null || !intent.getAction().equals(Constants.BROADCAST_ACTION) || playFragment.getController() == null) {
+                    if (intent == null || !intent.getAction().equals(IntentKey.BROADCAST_ACTION) || playFragment.getController() == null) {
                         return;
                     }
 
                     int currentStatus = intent.getIntExtra("action", 1);
-                    if (currentStatus == Constants.BROADCAST_ACTION_PREV) {
+                    if (currentStatus == IntentKey.BROADCAST_ACTION_PREV) {
                         playFragment.playPrevious();
-                    } else if (currentStatus == Constants.BROADCAST_ACTION_PLAYPAUSE) {
+                    } else if (currentStatus == IntentKey.BROADCAST_ACTION_PLAYPAUSE) {
                         playFragment.getController().togglePlay();
-                    } else if (currentStatus == Constants.BROADCAST_ACTION_NEXT) {
+                    } else if (currentStatus == IntentKey.BROADCAST_ACTION_NEXT) {
                         playFragment.playNext(false);
-                    } else if (currentStatus == Constants.BROADCAST_ACTION_CLOSE) {
+                    } else if (currentStatus == IntentKey.BROADCAST_ACTION_CLOSE) {
                         playServerSwitch(false);
                         finish();
                         NotificationUtils.cancelAll();
                     }
                 }
             };
-            registerReceiver(mRemoteActionReceiver, new IntentFilter(Constants.BROADCAST_ACTION));
+            registerReceiver(mRemoteActionReceiver, new IntentFilter(IntentKey.BROADCAST_ACTION));
         } else {
-            if (mRemoteActionReceiver !=null){
+            if (mRemoteActionReceiver != null) {
                 unregisterReceiver(mRemoteActionReceiver);
                 mRemoteActionReceiver = null;
             }
-            if (playFragment.getPlayer().isPlaying()){// 退出画中画时,暂停播放(画中画的全屏也会触发,但全屏后会自动播放)
+            if (playFragment.getPlayer().isPlaying()) {// 退出画中画时,暂停播放(画中画的全屏也会触发,但全屏后会自动播放)
                 playFragment.getController().togglePlay();
             }
         }
@@ -966,54 +978,100 @@ public class DetailActivity extends BaseVbActivity<ActivityDetailBinding> {
     /**
      * 后台播放服务开关,开启时注册操作广播,关闭时注销
      */
-    private void playServerSwitch(boolean open){
-        if (open){
+    private void playServerSwitch(boolean open) {
+        if (open) {
             VodInfo.VodSeries vod = vodInfo.seriesMap.get(vodInfo.playFlag).get(vodInfo.playIndex);
-            PlayService.start(playFragment.getPlayer(),vodInfo.name+"&&"+vod.name);
+            PlayService.start(playFragment.getPlayer(), vodInfo.name + "&&" + vod.name);
             registerActionReceiver(true);
-        }else {
-            if (ServiceUtils.isServiceRunning(PlayService.class)){
+        } else {
+            if (ServiceUtils.isServiceRunning(PlayService.class)) {
                 PlayService.stop();
                 registerActionReceiver(false);
             }
         }
     }
 
-    public String getCurrentVodUrl(){
-        return playFragment==null?"":playFragment.getFinalUrl();
+    public String getCurrentVodUrl() {
+        return playFragment == null ? "" : playFragment.getFinalUrl();
     }
 
-    public void quickLineChange(){
+    public void quickLineChange() {
         List<VodInfo.VodSeriesFlag> flags = seriesFlagAdapter.getData();
-        if (flags.size()>1){
+        if (flags.size() > 1) {
             int currentIndex = 0;
-            for (int i = 0; i <flags.size(); i++) {
-                if (flags.get(i).selected){
+            for (int i = 0; i < flags.size(); i++) {
+                if (flags.get(i).selected) {
                     currentIndex = i;
                 }
             }
-            currentIndex+=1;
-            if (currentIndex>=flags.size()){
+            currentIndex += 1;
+            if (currentIndex >= flags.size()) {
                 currentIndex = 0;
             }
             mBinding.mGridViewFlag.smoothScrollToPosition(currentIndex);
             chooseFlag(currentIndex);
-            mBinding.mGridView.postDelayed(() -> chooseSeries(vodInfo.playIndex,true),300);
+            mBinding.mGridView.postDelayed(() -> chooseSeries(vodInfo.playIndex, true), 300);
         }
     }
 
-    public void showParseRoot(boolean show, ParseAdapter adapter){
+    public void showParseRoot(boolean show, ParseAdapter adapter) {
         mBinding.rvParse.setAdapter(adapter);
         int defaultIndex = 0;
         for (int i = 0; i < adapter.getData().size(); i++) {
-            if (adapter.getData().get(i).isDefault()){
+            if (adapter.getData().get(i).isDefault()) {
                 defaultIndex = i;
                 break;
             }
         }
-        if (defaultIndex!=0){
+        if (defaultIndex != 0) {
             mBinding.rvParse.scrollToPosition(defaultIndex);
         }
-        mBinding.parseRoot.setVisibility(show?View.VISIBLE:View.GONE);
+        mBinding.parseRoot.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    private void toggleScreenShotListen(boolean open) {
+        if (open){
+            if (screenShotListenManager == null){
+                screenShotListenManager = ScreenShotListenManager.newInstance(this);
+            }
+            screenShotListenManager.setListener(imagePath -> {
+
+                if (playFragment.getPlayer().isInPlaybackState())return;
+
+                new XPopup.Builder(this)
+                        .isDarkTheme(Utils.isDarkTheme())
+                        .asCenterList("",new String[]{"跳转阿狸","跳转优汐","跳转夸父","关闭"}, null, (position, text) -> {
+                            String pkg = "";
+                            String cls = "";
+                            switch (position){
+                                case 0:
+                                    pkg = "com.alicloud.databox";
+                                    cls = "com.alicloud.databox.launcher.splash.SplashActivity";
+                                    break;
+                                case 1:
+                                    pkg = "com.UCMobile";
+                                    cls = "com.uc.browser.InnerUCMobile";
+                                    break;
+                                case 2:
+                                    pkg = "com.quark.browser";
+                                    cls = "com.ucpro.MainActivity";
+                                    break;
+                                case 3:
+                                    return;
+                            }
+                            try {
+                                startActivity(new Intent().setComponent(new ComponentName(pkg, cls)));
+                            }catch (Exception e){
+                                ToastUtils.showShort("未找到应用");
+                            }
+                        })
+                        .show();
+            });
+            screenShotListenManager.startListen();
+        }else {
+            if (screenShotListenManager != null) {
+                screenShotListenManager.stopListen();
+            }
+        }
     }
 }

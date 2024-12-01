@@ -17,12 +17,7 @@ import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * @Author : Liu XiaoRan
- * @Email : 592923276@qq.com
- * @Date : on 2023/8/14 15:06.
- * @Description :
- */
+
 public class Utils {
 
     public static boolean supportsPiPMode() {

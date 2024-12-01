@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.PermissionChecker;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.AppUtils;
 import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.callback.EmptyCallback;
 import com.github.tvbox.osc.callback.LoadingCallback;
@@ -43,11 +44,6 @@ import java.io.InputStreamReader;
 
 import me.jessyan.autosize.internal.CustomAdapt;
 
-/**
- * @author pj567
- * @date :2020/12/17
- * @description:
- */
 public abstract class BaseActivity extends AppCompatActivity implements CustomAdapt, OnTitleBarListener {
     protected Context mContext;
     private LoadService mLoadService;
@@ -71,6 +67,9 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
         initStatusBar();
         initTitleBar();
         init();
+        if (!App.getInstance().isNormalStart){
+            AppUtils.relaunchApp(true);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
